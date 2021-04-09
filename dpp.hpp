@@ -37,7 +37,8 @@ enum DPPSignals {
 };
 
 // number of philosophers
-constexpr std::uint8_t N_PHILO = 7U;
+//constexpr std::uint8_t N_PHILO = 7U;
+#define N_PHILO ((uint8_t)7)
 
 } // namespace DPP
 

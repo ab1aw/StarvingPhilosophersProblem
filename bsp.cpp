@@ -35,7 +35,8 @@
 #include "dpp.hpp"
 #include "bsp.hpp"
 
-#include "safe_std.h"   // portable "safe" <stdio.h>/<string.h> facilities
+#include <stdio.h>
+//#include "safe_std.h"   // portable "safe" <stdio.h>/<string.h> facilities
 #include <stdlib.h>
 
 Q_DEFINE_THIS_FILE
@@ -55,7 +56,7 @@ static uint32_t l_rnd; // random seed
 
 //............................................................................
 void BSP::init(int argc, char **argv) {
-    PRINTF_S("Dining Philosopher Problem example"
+    printf("Dining Philosopher Problem example"
            "\nQP %s\n"
            "Press p to pause the forks\n"
            "Press s to serve the forks\n"
@@ -71,8 +72,8 @@ void BSP::init(int argc, char **argv) {
     QS_USR_DICTIONARY(PHILO_STAT);
 
     // setup the QS filters...
-    QS_GLB_FILTER(QP::QS_ALL_RECORDS);
-    QS_GLB_FILTER(-QP::QS_QF_TICK);
+    QS_FILTER_ON(QP::QS_ALL_RECORDS);
+    QS_FILTER_OFF(-QP::QS_QF_TICK);
 }
 //............................................................................
 void BSP::terminate(int16_t result) {
@@ -81,16 +82,16 @@ void BSP::terminate(int16_t result) {
 }
 //............................................................................
 void BSP::displayPhilStat(uint8_t n, char const *stat, uint8_t food_supply) {
-    PRINTF_S("Philosopher %2d is %s. Food supply is %d.\n", (int)n, stat, food_supply);
+    printf("Philosopher %2d is %s. Food supply is %d.\n", (int)n, stat, food_supply);
 
-    QS_BEGIN_ID(PHILO_STAT, AO_Philo[n]->m_prio) // app-specific record begin
+    QS_BEGIN(PHILO_STAT, (void *)0) // application-specific record begin
         QS_U8(1, n);  // Philosopher number
         QS_STR(stat); // Philosopher status
     QS_END()
 }
 //............................................................................
 void BSP::displayPaused(uint8_t paused) {
-    PRINTF_S("Paused is %s\n", paused ? "ON" : "OFF");
+    printf("Paused is %s\n", paused ? "ON" : "OFF");
 }
 //............................................................................
 uint32_t BSP::random(void) { // a very cheap pseudo-random-number generator
@@ -118,7 +119,7 @@ void QF::onStartup(void) { // QS startup callback
 }
 //............................................................................
 void QF::onCleanup(void) {  // cleanup callback
-    PRINTF_S("\n%s\n", "Bye! Bye!");
+    printf("\n%s\n", "Bye! Bye!");
     QF_consoleCleanup();
 }
 //............................................................................
@@ -175,9 +176,9 @@ void QS::onCommand(uint8_t cmdId,
 } // namespace QP
 
 //............................................................................
-extern "C" Q_NORETURN Q_onAssert(char const * const module, int_t const loc) {
+extern "C" void Q_onAssert(char const * const module, int_t const loc) {
     QS_ASSERTION(module, loc, (uint32_t)10000U); // report assertion to QS
-    FPRINTF_S(stderr, "Assertion failed in %s:%d", module, loc);
+    fprintf(stderr, "Assertion failed in %s:%d", module, loc);
     QP::QF::onCleanup();
     exit(-1);
 }
