@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<model version="5.1.0" links="1">
+<model version="4.6.0" links="1">
  <documentation>Dining Philosopher Problem example with MSM state machines</documentation>
  <!--${qpcpp}-->
  <framework name="qpcpp"/>
@@ -42,8 +42,7 @@
    <!--${AOs::Philo::m_timeEvt}-->
    <attribute name="m_timeEvt" type="QP::QTimeEvt" visibility="0x02" properties="0x00"/>
    <!--${AOs::Philo::Philo}-->
-   <operation name="Philo" type="explicit" visibility="0x00" properties="0x00">
-    <specifiers>noexcept</specifiers>
+   <operation name="Philo" type="" visibility="0x00" properties="0x00">
     <code>  : QActive(&amp;initial),
     m_timeEvt(this, TIMEOUT_SIG, 0U)</code>
    </operation>
@@ -255,8 +254,7 @@ Q_ASSERT(Q_EVT_CAST(TableEvt)-&gt;philoNum != PHILO_ID(this));</action>
    <!--${AOs::Table::m_max_food}-->
    <attribute name="m_max_food" type="std::uint8_t" visibility="0x02" properties="0x00"/>
    <!--${AOs::Table::Table}-->
-   <operation name="Table" type="explicit" visibility="0x00" properties="0x00">
-    <specifiers>noexcept</specifiers>
+   <operation name="Table" type="" visibility="0x00" properties="0x00">
     <code>  : QActive(&amp;initial)
 
 m_max_food = 3;
@@ -590,7 +588,8 @@ enum DPPSignals {
 };
 
 // number of philosophers
-constexpr std::uint8_t N_PHILO = 7U;
+// constexpr std::uint8_t N_PHILO = 7U;
+#define N_PHILO ((uint8_t)7)
 
 } // namespace DPP
 
