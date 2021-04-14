@@ -52,6 +52,7 @@ protected:
 namespace DPP {
 
 // Local objects -------------------------------------------------------------
+static Philo l_philo[N_PHILO];   // storage for all Philos
 // helper function to provide a randomized think time for Philos
 inline QP::QTimeEvtCtr think_time() {
     return static_cast<QP::QTimeEvtCtr>((BSP::random() % BSP::TICKS_PER_SEC)
@@ -124,16 +125,15 @@ Q_STATE_DEF(Philo, initial) {
     if (!registered) {
         registered = true;
 
-        QS_OBJ_DICTIONARY(&Philo::inst[0]);
-        QS_OBJ_DICTIONARY(&Philo::inst[0].m_timeEvt);
-        QS_OBJ_DICTIONARY(&Philo::inst[1]);
-        QS_OBJ_DICTIONARY(&Philo::inst[1].m_timeEvt);
-        QS_OBJ_DICTIONARY(&Philo::inst[2]);
-        QS_OBJ_DICTIONARY(&Philo::inst[2].m_timeEvt);
-        QS_OBJ_DICTIONARY(&Philo::inst[3]);
-        QS_OBJ_DICTIONARY(&Philo::inst[3].m_timeEvt);
-        QS_OBJ_DICTIONARY(&Philo::inst[4]);
-        QS_OBJ_DICTIONARY(&Philo::inst[4].m_timeEvt);
+        QS_OBJ_DICTIONARY(&l_philo[0].m_timeEvt);
+													 
+        QS_OBJ_DICTIONARY(&l_philo[1].m_timeEvt);
+													 
+        QS_OBJ_DICTIONARY(&l_philo[2].m_timeEvt);
+													 
+        QS_OBJ_DICTIONARY(&l_philo[3].m_timeEvt);
+													 
+        QS_OBJ_DICTIONARY(&l_philo[4].m_timeEvt);
 
         QS_FUN_DICTIONARY(&Philo::initial);
         QS_FUN_DICTIONARY(&Philo::thinking);
@@ -141,12 +141,15 @@ Q_STATE_DEF(Philo, initial) {
         QS_FUN_DICTIONARY(&Philo::eating);
         QS_FUN_DICTIONARY(&Philo::starving);
         QS_FUN_DICTIONARY(&Philo::dead);
-
-        QS_SIG_DICTIONARY(TIMEOUT_SIG, nullptr); // global signals
     }
 
     subscribe(EAT_SIG);
     subscribe(TEST_SIG);
+    QS_FUN_DICTIONARY(&thinking);
+    QS_FUN_DICTIONARY(&hungry);
+    QS_FUN_DICTIONARY(&eating);
+    QS_FUN_DICTIONARY(&starving);
+    QS_FUN_DICTIONARY(&dead);
     return tran(&thinking);
 }
 //.${AOs::Philo::SM::thinking} ...............................................

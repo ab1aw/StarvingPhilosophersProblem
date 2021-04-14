@@ -67,13 +67,13 @@ void BSP::init(int argc, char **argv) {
 
     (void)argc;
     (void)argv;
-    Q_ALLEGE(QS_INIT(argc > 1 ? argv[1] : nullptr));
+    Q_ALLEGE(QS_INIT(argc > 1 ? argv[1] : (void *)0));
     QS_OBJ_DICTIONARY(&l_clock_tick); // must be called *after* QF::init()
     QS_USR_DICTIONARY(PHILO_STAT);
 
     // setup the QS filters...
     QS_FILTER_ON(QP::QS_ALL_RECORDS);
-    QS_FILTER_OFF(-QP::QS_QF_TICK);
+    QS_FILTER_OFF(QP::QS_QF_TICK);
 }
 //............................................................................
 void BSP::terminate(int16_t result) {
